@@ -4,8 +4,17 @@
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
   </head>
   <body>
-    <canvas id="gameCanvas" width="900" height="500" style="border:1px solid #000000;"></canvas>
+    <canvas id="gameCanvas" width="900" height="500" style="border:1px solid #000000;"></canvas> <br />
+    <button onclick="monsterFactory.create('zombie'); characterCreate.create(); $('#attack').css('visibility', 'visible'); $('#playSP').toggle();" id="playSP">Play Single Player</button>
+    <button id="attack" style="visibility:hidden;" onclick="attack();">Attack</button>
+    
+    
+    <!--Scripts-->
     <script src="character.js"></script>
-    <script src="characterEnemy.js"></script>
+    <script src="characterEnemy.js"></script> 
+    <script src="monsterFactory.js"></script>
+    <script src="characterStats.js"></script>
+    <script src="battle.js"></script>
+    <script src="shop.js"></script>
   </body>
 </html>
