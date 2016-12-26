@@ -1,13 +1,27 @@
 <!DOCTYPE html>
   <head>
     <title>SOFT352Project</title>
-    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script> <!-- Link JQuery -->
+    <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.0.1.css"> <!-- CSS for QUnit -->
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <canvas id="gameCanvas" width="900" height="500" style="border:1px solid #000000;"></canvas> <br />
-    <button onclick="monsterFactory.create('zombie'); characterCreate.create(); $('#attack').css('visibility', 'visible'); $('#playSP').toggle();" id="playSP">Play Single Player</button>
-    <button id="attack" style="visibility:hidden;" onclick="attack();">Attack</button>
+    <div id="container">
+      <canvas id="gameCanvas" width="900" height="500"></canvas>  
+    </div> 
+    <br /><!-- The canvas that things are drawn on -->
+    <p style="display: inline;" id="playerHealthBar">Player Health: </p><progress id="health" value="0" max="0"></progress> 
+    <p style="display: inline;" id="monsterHealthBar">Monster Health: </p><progress id="monHealth" value="0" max="0"></progress> <!-- Enemy health bar -->
+    <br />
+    <button onclick="monsterFactory.create(monsterArray[0]); characterCreate.create(); $('#attack').css('visibility', 'visible'); $('#defend').css('visibility', 'visible'); $('#playSP').toggle();" id="playSP">Play Single Player</button> <!-- Play single player button that reveals more buttons and calls the create functions, then hides itself -->
+    <button id="attack" style="visibility:hidden;" onclick="attackEnemy();">Attack</button> <!-- Button that calls the attack function when clicked -->
+    <button id="defend" style="visibility:hidden;" onclick="defend();">Defend</button> <!-- Button that calls the defend function when clicked -->
     
+    <!-- QUnit -->
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+    <script src="https://code.jquery.com/qunit/qunit-2.0.1.js"></script>
+    <script src="tests.js"></script>
     
     <!--Scripts-->
     <script src="character.js"></script>
