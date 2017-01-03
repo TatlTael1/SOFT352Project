@@ -6,3 +6,7 @@
   border: 1px solid #000000;
   display: block;
 }
+
+#attack, #defend, #item, #run, #restart {
+  visibility: hidden;
+}
