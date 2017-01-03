@@ -1,7 +1,17 @@
 var health = document.getElementById("health"); //Get the progress bar so it can be modified - Player bar
 var monHealth = document.getElementById("monHealth") //Get the progress bar so it can be modified - Monster bar
 var round = 0; //Round count, starts at 0 because of array
-var monsterArray = ["zombie", "zombie", "zombie"]; //Array of monsters, in the order that the player fights them (could maybe randomise it?)
+var monsterArray = ["zombie", "zombie", "zombie", "wolf", "wolf", "wolf", "raider", "raider", "dire wolf"]; //Array of monsters, in the order that the player fights them (could maybe randomise it?), some appear multiple times to fight them again without changing round count in weird ways
+
+function startBattle() { //Start the Single Player battle
+  monsterFactory.create(monsterArray[0]); //Create the first monster
+  characterCreate.create(); //Create the character
+  $('#attack').css('visibility', 'visible'); //Reveal the battle buttons 
+  $('#defend').css('visibility', 'visible'); 
+  $('#item').css('visibility', 'visible');
+  $('#run').css('visibility', 'visible');
+  $('#playSP').toggle(); //Hide the play button
+}
 
 function attackEnemy() {
   console.log("You have attacked!");
@@ -15,6 +25,8 @@ function attackEnemy() {
   } else { //Otherwise...
     goldEarned = monster.gold; //Give the player gold
     expEarned = monster.expPoints; //Give the player experience
+    newHP = 0; //Set the health to zero, so a negative number isn't shown when they click no/cancel
+    $("#monsterHealthBar").text("Monster Health: " + newHP + "/" + monster.maxHitPoints); //Displays the monster's current health against it's maximum health, to compliment the health bar
     ctx.clearRect(0, 0, canvas.width, canvas.height); //Clear the Canvas...
     drawCharacter(); //...And redraw the player character so the enemy disappears
     roundAdd = round + 1; //As Arrays start at 0, the round number displayed needs to be 1 higher
@@ -24,8 +36,11 @@ function attackEnemy() {
       nextRound(); //Call the function that creates the next round
       return round; //Pass the new round number back
     } else { //If they cancel
+      $('#restart').css('visibility', 'visible'); //Show the restart button to restart the battles
       $("#attack").css("visibility", "hidden"); //Hide the battle buttons
       $("#defend").css("visibility", "hidden");
+      $('#item').css('visibility', 'hidden');
+      $('#run').css('visibility', 'hidden');
     }
   }
   return monster.hitPoints; //Return the new HP value to the object
@@ -57,7 +72,17 @@ function enemyAttack() { //Same as attackEnemy, but from the enemy to the player
   console.log("You have been attacked!");
   dmgDealt = monster.dmg - character.armour;
   newHP = character.hitPoints - dmgDealt;
-  character.hitPoints = newHP;
+  if(newHP > 0) {
+    character.hitPoints = newHP;
+  } else {
+    character.hitPoints = 0;
+    window.alert("You have been defeated!");
+    $('#restart').css('visibility', 'visible'); //Show the restart button to restart the battles
+    $("#attack").css("visibility", "hidden"); //Hide the battle buttons
+    $("#defend").css("visibility", "hidden");
+    $('#item').css('visibility', 'hidden');
+    $('#run').css('visibility', 'hidden');
+  }
   $("#playerHealthBar").text("Player Health: " + newHP + "/" + character.maxHitPoints); //Displays the player's current health against their maximum health, to compliment the health bar
   console.log(character.hitPoints);
   playerHealthBar(dmgDealt);
@@ -74,6 +99,34 @@ function enemyAttackD(armour) { //Works the same as enemyAttack, but needs diffe
   console.log(character.hitPoints);
   playerHealthBar(dmgDealt);
   return character.hitPoints;
+}
+
+function item() {
+  
+}
+
+function run() {
+  round = -1; //Set the round to -1 so the array doesn't affect anything
+  $('#restart').css('visibility', 'visible'); //Show the restart button to restart the battles
+  $("#attack").css("visibility", "hidden"); //Hide the battle buttons
+  $("#defend").css("visibility", "hidden");
+  $('#item').css('visibility', 'hidden');
+  $('#run').css('visibility', 'hidden');
+  ctx.clearRect(0, 0, canvas.width, canvas.height); //Clear the Canvas...
+  drawCharacter(); //...And redraw the player character so the enemy disappears
+}
+
+function restart() {
+  round = 0; //Reset the round count
+  character.hitPoints = character.maxHitPoints; //Reset the character's health
+  health.value = character.maxHitPoints;
+  $("#playerHealthBar").text("Player Health: " + character.hitPoints + "/" + character.maxHitPoints);
+  monsterFactory.create(monsterArray[round]); //Create the first monster
+  $('#attack').css('visibility', 'visible'); //Show the battle buttons
+  $('#defend').css('visibility', 'visible'); 
+  $('#item').css('visibility', 'visible');
+  $('#run').css('visibility', 'visible');
+  $('#restart').css('visibility', 'hidden'); //Hide the restart button
 }
 
 function nextRound() { //Starts the next round, i.e. creates the next monster in the array
