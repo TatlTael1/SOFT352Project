@@ -4,14 +4,20 @@
     <script src="bower_components/jquery/dist/jquery.min.js"></script> <!-- Link JQuery -->
     <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.0.1.css"> <!-- CSS for QUnit -->
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="popup.css">
   </head>
-  <body>
+  <body onload="checkLogin()">
     <div id="container">
       <canvas id="gameCanvas" width="900" height="500"></canvas>  
     </div> 
     <br /><!-- The canvas that things are drawn on -->
     <p style="display: inline;" id="playerHealthBar">Player Health: </p><progress id="health" value="0" max="0"></progress> <!-- Player health bar -->
     <p style="display: inline;" id="monsterHealthBar">Monster Health: </p><progress id="monHealth" value="0" max="0"></progress> <!-- Enemy health bar -->
+    <p style="display: inline;" id="goldAndExp">Gold and Exp appear here</p> <!-- P tag to hold information on account gold and exp -->
+        <!-- Display Register Button -->
+    <button id="popupR" onclick="div_show()">Register</button>
+    <button id="popupL" onclick="show_login()">Login</button>
+    <button id="logout" onclick="logout()">Logout</button>
     <br />
     <button onclick="startBattle();" id="playSP">Play Single Player</button> <!-- Play single player button that reveals more buttons and calls the create functions, then hides itself -->
     <button id="attack" onclick="attackEnemy();">Attack</button> <!-- Button that calls the attack function when clicked -->
@@ -20,11 +26,49 @@
     <button id="run" onclick="run();">Run</button> <!-- Button that allows you to run from a fight without losing it -->
     <button id="restart" onclick="restart();">Restart</button> <!-- Button to restart the game if you die or run -->
     
+    <br /><button id="btnShop" onclick="loadShop(); $('#btnShop').toggle();">Shop</button>
+    <div id="shopContainer">
+      <div id="shop"></div>
+    </div>
+    
+    <div id="abc">
+      <!-- Popup Div Starts Here -->
+      <div id="popupRegister">
+        <!-- Register Form -->
+        <form action="#" id="register" name="register">
+          <img class="close" src="images/4.png" onclick ="div_hide()">
+          <h2>Register</h2>
+          <hr>
+          <input id="Rname" name="Rname" placeholder="Username" type="text">
+          <input id="Rpassword" name="Rpassword" placeholder="Password" type="password">
+          <input id="Rpassword2" name="Rpassword2" placeholder="Re-enter Password" type="password">
+          <a href="javascript:%20check_empty()" id="btnRegister">Register</a>
+        </form>
+      </div>
+      <!-- Popup Div Ends Here -->
+    </div>
+    
+    <div id="def">
+      <!-- Popup Div Starts Here -->
+      <div id="popupLogin">
+        <!-- Register Form -->
+        <form action="#" id="login" name="login">
+          <img class="close" src="images/4.png" onclick ="login_hide()">
+          <h2>Login</h2>
+          <hr>
+          <input id="Lname" name="Lname" placeholder="Username" type="text">
+          <input id="Lpassword" name="Lpassword" placeholder="Password" type="password">
+          <a href="javascript:%20check_login()" id="btnLogin">Login</a>
+        </form>
+      </div>
+      <!-- Popup Div Ends Here -->
+    </div>
+    
     <!-- QUnit -->
-    <div id="qunit"></div>
+    <!-- <div id="qunit"></div>
     <div id="qunit-fixture"></div>
     <script src="https://code.jquery.com/qunit/qunit-2.0.1.js"></script>
-    <script src="tests.js"></script>
+    <script src="tests.js"></script> -->
     
     <!--Scripts-->
     <script src="character.js"></script>
@@ -33,5 +77,8 @@
     <script src="characterStats.js"></script>
     <script src="battle.js"></script>
     <script src="shop.js"></script>
+    <script src="popupRegister.js"></script>
+    <script src="popupLogin.js"></script>
+    <script src="logout.js"></script>
   </body>
 </html>

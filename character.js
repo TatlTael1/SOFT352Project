@@ -46,5 +46,6 @@ if (canvas.getContext("2d")) { // Check HTML5 canvas support
     ctx.moveTo(200, 230);
     ctx.lineTo(250, 330);
     ctx.stroke();
+    
   }
 }

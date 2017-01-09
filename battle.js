@@ -3,14 +3,42 @@ var monHealth = document.getElementById("monHealth") //Get the progress bar so i
 var round = 0; //Round count, starts at 0 because of array
 var monsterArray = ["zombie", "zombie", "zombie", "wolf", "wolf", "wolf", "raider", "raider", "dire wolf"]; //Array of monsters, in the order that the player fights them (could maybe randomise it?), some appear multiple times to fight them again without changing round count in weird ways
 
+function checkLogin() {
+  if(sessionStorage.getItem("loggedIn") == 1) {
+    $('#popupR').css('visibility', 'hidden');
+    $('#popupL').css('visibility', 'hidden');
+    $('#logout').css("visibility", "visible");
+    
+    $.ajax({
+        url: "/getGE",
+        data: { 
+          "username": sessionStorage.getItem("username")
+        },
+        cache: false, //Don't cache the call
+        type: "POST",
+        success: function(response) {
+          $('#goldAndExp').text("You have " + response.character.gold + " gold and " + response.character.exp + " exp. You are level: " + response.character.level);
+        },
+        error: function(err) { 
+        alert(err.responseText); //On an error, display the error in an alert
+      }
+      });
+  }
+}
+
 function startBattle() { //Start the Single Player battle
-  monsterFactory.create(monsterArray[0]); //Create the first monster
-  characterCreate.create(); //Create the character
-  $('#attack').css('visibility', 'visible'); //Reveal the battle buttons 
-  $('#defend').css('visibility', 'visible'); 
-  $('#item').css('visibility', 'visible');
-  $('#run').css('visibility', 'visible');
-  $('#playSP').toggle(); //Hide the play button
+  if(sessionStorage.getItem("loggedIn") == 1) { //If you are logged in, start the game
+    monsterFactory.create(monsterArray[0]); //Create the first monster
+    characterCreate.create(); //Create the character
+    $('#attack').css('visibility', 'visible'); //Reveal the battle buttons 
+    $('#defend').css('visibility', 'visible'); 
+    $('#item').css('visibility', 'visible');
+    $('#run').css('visibility', 'visible');
+    $('#playSP').toggle(); //Hide the play button
+    $('#logout').css("visibility", "hidden");
+  } else { //If you aren't logged in, you will be alerted to do so
+    alert("Please Login/Register to play."); //Since the character details are tied to the user profile, they need an account to play
+  }
 }
 
 function attackEnemy() {
@@ -25,6 +53,28 @@ function attackEnemy() {
   } else { //Otherwise...
     goldEarned = monster.gold; //Give the player gold
     expEarned = monster.expPoints; //Give the player experience
+    
+    character.gold = character.gold + monster.gold;
+    character.exp = character.exp + monster.expPoints;
+    $('#goldAndExp').text("You have " + character.gold + " gold and " + character.exp + " exp. You are level: " + character.level);
+    
+    $.ajax({
+        url: "/earnReward",
+        data: { 
+          "username": sessionStorage.getItem("username"),
+          goldEarned: monster.gold,
+          expEarned: monster.expPoints
+        },
+        cache: false, //Don't cache the call
+        type: "POST", 
+        success: function(response) {
+          alert("You have earned " + goldEarned + " gold and " + expEarned + " exp!");
+        },
+        error: function(err) { 
+        alert(err.responseText); //On an error, display the error in an alert
+      }
+    });
+    
     newHP = 0; //Set the health to zero, so a negative number isn't shown when they click no/cancel
     $("#monsterHealthBar").text("Monster Health: " + newHP + "/" + monster.maxHitPoints); //Displays the monster's current health against it's maximum health, to compliment the health bar
     ctx.clearRect(0, 0, canvas.width, canvas.height); //Clear the Canvas...
@@ -62,6 +112,7 @@ function playerHealthBar(dmg) { //Works the same as enemyHealthBar, just affects
 
 function enemyHealthBar(dmg) {
   console.log("In enemyHealthBar");
+  console.log(dmg);
   this.dmg = dmg; //Take the damage value for use
   monHealth.value = monHealth.value - dmg; //Set the value of the progress bar to its current value minus the damage done
   console.log(monHealth.value);
@@ -112,6 +163,7 @@ function run() {
   $("#defend").css("visibility", "hidden");
   $('#item').css('visibility', 'hidden');
   $('#run').css('visibility', 'hidden');
+  $('#logout').css("visibility", "visible");
   ctx.clearRect(0, 0, canvas.width, canvas.height); //Clear the Canvas...
   drawCharacter(); //...And redraw the player character so the enemy disappears
 }
