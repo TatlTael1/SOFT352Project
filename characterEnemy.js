@@ -4,6 +4,10 @@ if (canvas.getContext("2d")) { // Check HTML5 canvas support
   
   function drawZombie() {
     ctx.beginPath();
+    ctx.font = "30px Arial";
+    ctx.fillText("Zombie", 700, 60);
+    
+    ctx.beginPath();
     ctx.fillStyle = "green"; 
     ctx.arc(700, 100, 30, 0, Math.PI * 2, true); // draw circle for head
     // (x,y) center, radius, start angle, end angle, anticlockwise
@@ -52,6 +56,10 @@ if (canvas.getContext("2d")) { // Check HTML5 canvas support
   
   function drawRaider() {
     ctx.beginPath();
+    ctx.font = "30px Arial";
+    ctx.fillText("Raider", 700, 60);
+    
+    ctx.beginPath();
     ctx.fillStyle = "red"; 
     ctx.arc(700, 100, 30, 0, Math.PI * 2, true); // draw circle for head
     // (x,y) center, radius, start angle, end angle, anticlockwise
@@ -99,6 +107,10 @@ if (canvas.getContext("2d")) { // Check HTML5 canvas support
   }
   
   function drawWolf() {
+    ctx.beginPath();
+    ctx.font = "30px Arial";
+    ctx.fillText("Wolf", 500, 180);
+    
     ctx.beginPath(); //Draw head
     ctx.fillStyle = "grey";
     ctx.arc(500, 225, 30, 0, Math.PI * 2, true);
@@ -166,6 +178,10 @@ if (canvas.getContext("2d")) { // Check HTML5 canvas support
   }
   
   function drawDireWolf() {
+    ctx.beginPath();
+    ctx.font = "30px Arial";
+    ctx.fillText("Dire Wolf", 500, 180);
+    
     ctx.beginPath(); //Draw head
     ctx.fillStyle = "brown";
     ctx.arc(500, 225, 30, 0, Math.PI * 2, true);

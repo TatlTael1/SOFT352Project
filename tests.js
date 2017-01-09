@@ -95,3 +95,10 @@ QUnit.test("Test the battle features: Restart", function (assert) {
   health.value = 0;
   health.max = 0;
 });
+
+//This test passes but leaves the shop open and I can't figure out a way of closing it again correctly, so I have commented it out to prevent it from leaving the shop open and allowing a second instance of it to be opened
+ /* QUnit.test("Test the shop features: Open the shop", function (assert) {
+  $('#btnShop').trigger('click');
+  assert.equal($('#shop').html(), "Welcome to the shop!", "The shop opens up.")
+  $('#btnShop').toggle();
+}) */

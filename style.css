@@ -2,11 +2,15 @@
   width: 1500px;
 }
 
-#gameCanvas {
+#gameCanvas, #shop {
   border: 1px solid #000000;
   display: block;
 }
 
-#attack, #defend, #item, #run, #restart {
+#shop {
+  width: 900px;
+}
+
+#attack, #defend, #item, #run, #restart, #logout {
   visibility: hidden;
 }
